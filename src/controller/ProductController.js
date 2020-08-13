@@ -9,5 +9,15 @@ module.exports = {
         } catch (error) {
             return helper.response(res, 400, 'Bad request', error)
         }
+    },
+    postProduct: (req, res) => {
+        console.log(req.body)
+    },
+    patchProduct: (req, res) => {
+        console.log(req.params.id)
+        res.send('Patch Successed')
+    },
+    deleteProduct: (req, res) => {
+        res.send('Delete Successed')
     }
 }
