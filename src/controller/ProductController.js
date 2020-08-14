@@ -1,13 +1,23 @@
 const helper = require('../helper/product.js');
-const { getProduct, getProductById, postProduct, patchProduct, deleteProduct } = require('../model/Product')
+const { getProduct, sortProduct, getProductById, postProduct, patchProduct, deleteProduct } = require('../model/Product')
 
 module.exports = {
     getProduct: async (req, res) => {
-        try {
-            const result = await getProduct()
-            return helper.response(res, 200, 'Success Get Product', result)
-        } catch (error) {
-            return helper.response(res, 400, 'Bad request', error)
+        const sort = req.query.sort
+        if (sort) {
+            try {
+                const result = await sortProduct(sort)
+                return helper.response(res, 200, 'Success Sort Product', result)
+            } catch (error) {
+                return helper.response(res, 400, 'Bad request', error)
+            }
+        } else {
+            try {
+                const result = await getProduct()
+                return helper.response(res, 200, 'Success Get Product', result)
+            } catch (error) {
+                return helper.response(res, 400, 'Bad request', error)
+            }
         }
     },
     getProductById: async (req, res) => {

@@ -8,6 +8,13 @@ module.exports = {
             })
         })
     },
+    sortProduct: (sort) => {
+        return new Promise((resolve, reject) => {
+            connection.query(`SELECT * FROM product ORDER BY ${sort}`, sort, (error, result) => {
+                !error ? resolve(result) : reject(new Error(error))
+            })
+        })
+    },
     getProductById: (id) => {
         return new Promise((resolve, reject) => {
             connection.query(`SELECT * FROM product WHERE product_id = ?`, id, (error, result) => {
