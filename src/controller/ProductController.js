@@ -29,31 +29,36 @@ const getNextPage = (page, totalPage, currentQuery) => {
 module.exports = {
     getProduct: async (req, res) => {
         let { search, sort, page, limit } = req.query
-        page = parseInt(page)
-        limit = parseInt(limit)
+        if (page && limit) {
+            console.log('masuk')
+            page = parseInt(page)
+            limit = parseInt(limit)
 
-        let totalData = await getProductCount()
+            let totalData = await getProductCount()
 
-        let totalPage = Math.ceil(totalData / limit)
-        let offset = (page * limit) - limit
+            let totalPage = Math.ceil(totalData / limit)
+            let offset = (page * limit) - limit
 
-        let previousPage = getPrevPage(page, req.query)
-        let nextPage = getNextPage(page, totalPage, req.query)
+            let previousPage = getPrevPage(page, req.query)
+            let nextPage = getNextPage(page, totalPage, req.query)
 
-        const setPage = {
-            page,
-            limit,
-            totalPage,
-            totalData,
-            previousPage: previousPage && `http://127.0.0.1:3000/product?${previousPage}`,
-            nextPage: nextPage && `http://127.0.0.1:3000/product?${nextPage}`
-        }
+            const setPage = {
+                page,
+                limit,
+                totalPage,
+                totalData,
+                previousPage: previousPage && `http://127.0.0.1:3000/product?${previousPage}`,
+                nextPage: nextPage && `http://127.0.0.1:3000/product?${nextPage}`
+            }
 
-        try {
-            const result = await getProduct(search, sort, limit, offset)
-            return helper.response(res, 200, 'Success Get Product', result, setPage)
-        } catch (error) {
-            return helper.response(res, 400, 'Bad request', error)
+            try {
+                const result = await getProduct(search, sort, limit, offset)
+                return helper.response(res, 200, 'Success Get Product', result, setPage)
+            } catch (error) {
+                return helper.response(res, 400, 'Bad request', error)
+            }
+        } else {
+            return helper.response(res, 404, `Cannot Get Product`)
         }
 
     },
