@@ -1,16 +1,9 @@
 const connection = require('../config/mysql')
 
 module.exports = {
-    getProduct: (limit, offset) => {
+    getProduct: (search, sort, limit, offset) => {
         return new Promise((resolve, reject) => {
-            connection.query(`SELECT * FROM product LIMIT ? OFFSET ?`, [limit, offset], (error, result) => {
-                !error ? resolve(result) : reject(new Error(error))
-            })
-        })
-    },
-    sortProduct: (sort) => {
-        return new Promise((resolve, reject) => {
-            connection.query(`SELECT * FROM product ORDER BY ${sort}`, sort, (error, result) => {
+            connection.query(`SELECT * FROM product WHERE product_name LIKE ? ORDER BY ? LIMIT ? OFFSET ?`, [`%${search}%`, sort, limit, offset], (error, result) => {
                 !error ? resolve(result) : reject(new Error(error))
             })
         })

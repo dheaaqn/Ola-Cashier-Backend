@@ -1,5 +1,5 @@
 const helper = require('../helper/product.js');
-const { getProduct, sortProduct, getProductCount, getProductById, postProduct, patchProduct, deleteProduct } = require('../model/Product')
+const { getProduct, getProductCount, getProductById, postProduct, patchProduct, deleteProduct, searchProduct, sortProduct } = require('../model/Product')
 const qs = require('querystring')
 
 const getPrevPage = (page, currentQuery) => {
@@ -28,19 +28,18 @@ const getNextPage = (page, totalPage, currentQuery) => {
 
 module.exports = {
     getProduct: async (req, res) => {
-        const sort = req.query.sort
-        const search = req.query.search
-
-        let { page, limit } = req.query
+        let { search, sort, page, limit } = req.query
         page = parseInt(page)
         limit = parseInt(limit)
 
         let totalData = await getProductCount()
+
         let totalPage = Math.ceil(totalData / limit)
         let offset = (page * limit) - limit
 
         let previousPage = getPrevPage(page, req.query)
         let nextPage = getNextPage(page, totalPage, req.query)
+
         const setPage = {
             page,
             limit,
@@ -50,21 +49,13 @@ module.exports = {
             nextPage: nextPage && `http://127.0.0.1:3000/product?${nextPage}`
         }
 
-        if (sort) {
-            try {
-                const result = await sortProduct(sort)
-                return helper.response(res, 200, 'Success Sort Product', result, setPage)
-            } catch (error) {
-                return helper.response(res, 400, 'Bad request', error)
-            }
-        } else {
-            try {
-                const result = await getProduct(limit, offset)
-                return helper.response(res, 200, 'Success Get Product', result, setPage)
-            } catch (error) {
-                return helper.response(res, 400, 'Bad request', error)
-            }
+        try {
+            const result = await getProduct(search, sort, limit, offset)
+            return helper.response(res, 200, 'Success Get Product', result, setPage)
+        } catch (error) {
+            return helper.response(res, 400, 'Bad request', error)
         }
+
     },
     getProductById: async (req, res) => {
         try {
