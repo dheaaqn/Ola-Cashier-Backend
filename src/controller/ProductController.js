@@ -1,5 +1,5 @@
 const helper = require('../helper/product.js');
-const { getProduct, getProductCount, getProductById, postProduct, patchProduct, deleteProduct, searchProduct, sortProduct } = require('../model/Product')
+const { getProduct, getProductCount, getProductById, postProduct, patchProduct, deleteProduct } = require('../model/Product')
 const qs = require('querystring')
 
 const getPrevPage = (page, currentQuery) => {
@@ -30,7 +30,6 @@ module.exports = {
     getProduct: async (req, res) => {
         let { search, sort, page, limit } = req.query
         if (page && limit) {
-            console.log('masuk')
             page = parseInt(page)
             limit = parseInt(limit)
 

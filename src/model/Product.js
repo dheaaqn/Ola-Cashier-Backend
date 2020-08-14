@@ -25,7 +25,6 @@ module.exports = {
     postProduct: (setData) => {
         return new Promise((resolve, reject) => {
             connection.query(`INSERT INTO product SET  ?`, setData, (error, result) => {
-                // console.log(result)
                 if (!error) {
                     const newResult = {
                         product_id: result.insertId,
