@@ -10,14 +10,14 @@ module.exports = {
     },
     getHistoryById: (id) => {
         return new Promise((resolve, reject) => {
-            connection.query(`SELECT * FROM history WHERE history_id ?`, id, (error, result) => {
+            connection.query(`SELECT * FROM history WHERE history_id = ?`, id, (error, result) => {
                 !error ? resolve(result) : reject(new Error(error))
             })
         })
     },
     postHistory: (setData) => {
         return new Promise((resolve, reject) => {
-            connection.query(`INSERT INTO history SET  ?`, setData, (error, result) => {
+            connection.query(`INSERT INTO history SET ?`, setData, (error, result) => {
                 !error ? resolve(result) : reject(new Error(error))
             })
         })

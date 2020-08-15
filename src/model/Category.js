@@ -17,7 +17,7 @@ module.exports = {
     },
     postCategory: (setData) => {
         return new Promise((resolve, reject) => {
-            connection.query(`INSERT INTO category SET  ?`, setData, (error, result) => {
+            connection.query(`INSERT INTO category SET ?`, setData, (error, result) => {
                 if (!error) {
                     const newResult = {
                         category_id: result.insertId,

@@ -1,10 +1,9 @@
 const router = require('express').Router()
-const { } = require('../controller/HistoryController')
-const { getAllHistory, getHistoryById } = require('../model/History')
+const { getAllHistory, getHistoryById } = require('../controller/HistoryController')
 
 // GET
 router.get('/', getAllHistory)
-router.get('/id', getHistoryById)
+router.get('/:id', getHistoryById)
 
 // POST
 
