@@ -5,6 +5,4 @@ const { getAllHistory, getHistoryById } = require('../controller/HistoryControll
 router.get('/', getAllHistory)
 router.get('/:id', getHistoryById)
 
-// POST
-
 module.exports = router

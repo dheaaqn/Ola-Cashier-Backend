@@ -39,9 +39,9 @@ module.exports = {
                         ...setData
                     }
                     resolve(newResult)
-                } else[
+                } else {
                     reject(new Error(error))
-                ]
+                }
             })
         })
     },
