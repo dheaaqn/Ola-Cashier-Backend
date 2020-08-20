@@ -30,7 +30,7 @@ module.exports = {
     getProduct: async (req, res) => {
         let { search, sort, page, limit } = req.query
 
-        if (search || sort || page || limit) {
+        if (search || sort && page && limit) {
             search
             sort
             page = parseInt(page)

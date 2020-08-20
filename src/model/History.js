@@ -28,5 +28,12 @@ module.exports = {
                 !error ? resolve(result) : reject(new Error(error))
             })
         })
+    },
+    deleteHistory: (id) => {
+        return new Promise((resolve, reject) => {
+            connection.query(`DELETE FROM orders WHERE order_id = ?`, id, (error, result) => {
+                !error ? resolve(result) : reject(new Error(error))
+            })
+        })
     }
 }

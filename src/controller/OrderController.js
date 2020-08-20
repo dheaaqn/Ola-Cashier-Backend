@@ -1,7 +1,7 @@
 const helper = require('../helper/product.js');
 const { getOrder, getOrderById, deleteOrder, postOrder, getOrderByHistoryId } = require('../model/Order');
 const { postHistory, patchHistory, getHistoryById } = require('../model/History');
-const { getProductById, getProduct } = require('../model/Product')
+const { getProductById } = require('../model/Product')
 
 module.exports = {
     getOrder: async (req, res) => {
@@ -19,7 +19,7 @@ module.exports = {
     getOrderById: async (req, res) => {
         try {
             const { id } = req.params
-            const result = await getOrderById()
+            const result = await getOrderById(id)
             if (result.length > 0) {
                 return helper.response(res, 200, 'Success Get Order by Id', result)
             } else {
@@ -31,7 +31,7 @@ module.exports = {
     },
     postOrder: async (req, res) => {
         const setHistoryData = {
-            history_invoice: Math.floor(Math.random() * 11),
+            history_invoice: Math.floor(Math.random() * 110000000),
             history_subtotal: 0,
             history_created_at: new Date()
         }
@@ -39,23 +39,29 @@ module.exports = {
 
         const historyId = resultHistory.insertId
         const dataOrder = req.body.order
-        console.log(dataOrder)
         let historySubtotal = 0
+
         for (let i = 0; i < dataOrder.length; i++) {
             const productId = dataOrder[i].product_id
             const orderQty = dataOrder[i].order_qty
+
             const product = await getProductById(productId)
             const productData = product[0]
-            const productPrice = productData.product_price
 
-            const setOrderData = {
-                history_id: historyId,
-                product_id: productId,
-                order_qty: orderQty,
-                order_price: orderQty * productPrice
+            if (!productData) {
+                return helper.response(res, 404, 'not found')
+            } else {
+                const productPrice = productData.product_price
+                const setOrderData = {
+                    history_id: historyId,
+                    product_id: productId,
+                    order_qty: orderQty,
+                    order_price: orderQty * productPrice
+                }
+                const resultOrder = await postOrder(setOrderData)
+                historySubtotal += resultOrder.order_price
             }
-            const resultOrder = await postOrder(setOrderData)
-            historySubtotal += resultOrder.order_price
+
         }
 
         const ppn = historySubtotal * 0.1
