@@ -1,11 +1,11 @@
 const connection = require("../config/mysql");
 
 module.exports = {
-  getProduct: (search, sort, limit, offset) => {
+  getProduct: (sort, limit, offset) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT *, category.category_name FROM product INNER JOIN category ON product.category_id = category.category_id WHERE product_name LIKE ? ORDER BY ${sort} LIMIT ? OFFSET ?`,
-        [`%${search}%`, limit, offset],
+        `SELECT *, category.category_name FROM product INNER JOIN category ON product.category_id = category.category_id ORDER BY ${sort} LIMIT ? OFFSET ?`,
+        [limit, offset],
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error));
         }
@@ -27,6 +27,17 @@ module.exports = {
       connection.query(
         `SELECT * FROM product WHERE product_id = ?`,
         id,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error));
+        }
+      );
+    });
+  },
+  searchProduct: (search) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM product WHERE product_name LIKE ?`,
+        `%${search}%`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error));
         }
