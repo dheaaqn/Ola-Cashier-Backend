@@ -7,19 +7,19 @@ const {
   deleteCategory,
 } = require("../controller/CategoryController");
 
-const { authUser } = require("../middleware/auth");
+const { authUser, authAdmin } = require("../middleware/auth");
 
 // GET
 router.get("/", authUser, getCategory);
 router.get("/:id", authUser, getCategoryById);
 
 // POST
-router.post("/", postCategory);
+router.post("/", authAdmin, postCategory);
 
 // PATCH
-router.patch("/:id", patchCategory);
+router.patch("/:id", authAdmin, patchCategory);
 
 // DELETE
-router.delete("/:id", deleteCategory);
+router.delete("/:id", authAdmin, deleteCategory);
 
 module.exports = router;

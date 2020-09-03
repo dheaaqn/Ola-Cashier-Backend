@@ -6,7 +6,7 @@ const {
   deleteOrder,
 } = require("../controller/OrderController");
 
-const { authUser } = require("../middleware/auth");
+const { authUser, authAdmin } = require("../middleware/auth");
 
 // GET
 router.get("/", authUser, getOrder);
@@ -16,5 +16,5 @@ router.get("/:id", authUser, getOrderById);
 router.post("/", authUser, postOrder);
 
 // DELETE
-router.delete("/:id", deleteOrder);
+router.delete("/:id", authAdmin, deleteOrder);
 module.exports = router;

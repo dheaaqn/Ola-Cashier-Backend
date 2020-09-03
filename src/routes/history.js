@@ -10,7 +10,7 @@ const {
   getRecentOrder,
 } = require("../controller/HistoryController");
 
-const { authUser } = require("../middleware/auth");
+const { authUser, authAdmin } = require("../middleware/auth");
 
 // GET
 router.get("/", authUser, getAllHistory);
@@ -22,6 +22,6 @@ router.get("/dashboard/recentorder", authUser, getRecentOrder);
 router.get("/:id", authUser, getHistoryById);
 
 // DELETE
-router.delete("/:id", deleteHistory);
+router.delete("/:id", authAdmin, deleteHistory);
 
 module.exports = router;
