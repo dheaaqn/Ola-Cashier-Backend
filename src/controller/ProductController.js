@@ -1,8 +1,11 @@
 const helper = require("../helper/product.js");
+const redis = require("redis");
+const client = redis.createClient();
 const {
   getProduct,
   getProductCount,
   getProductById,
+  getProductByCategory,
   postProduct,
   patchProduct,
   deleteProduct,
@@ -36,7 +39,7 @@ const getNextPage = (page, totalPage, currentQuery) => {
 
 module.exports = {
   getProduct: async (req, res) => {
-    let { search, sort, page, limit } = req.query;
+    let { category, search, sort, page, limit } = req.query;
 
     if (search) {
       try {
@@ -54,10 +57,11 @@ module.exports = {
       page = parseInt(page);
       limit = parseInt(limit);
     } else {
+      category = "";
       search = "";
       sort = "product_id";
       page = 1;
-      limit = 2;
+      limit = 24;
     }
 
     let totalData = await getProductCount();
@@ -80,6 +84,7 @@ module.exports = {
 
     try {
       const result = await getProduct(sort, limit, offset);
+
       return helper.response(res, 200, "Success Get Product", result, setPage);
     } catch (error) {
       return helper.response(res, 400, "Bad request", error);
@@ -89,10 +94,36 @@ module.exports = {
     try {
       const { id } = req.params;
       const result = await getProductById(id);
+
+      // set data result ke dalam redis
+      // client.set(`getproductbyid:${id}`, JSON.stringify(result));
+
       if (result.length > 0) {
         return helper.response(res, 200, "Success Get Product by Id", result);
       } else {
         return helper.response(res, 404, `Product id ${id} not found`);
+      }
+    } catch (error) {
+      return helper.response(res, 400, "Bad request", error);
+    }
+  },
+  getProductByCategory: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const result = await getProductByCategory(id);
+      if (result.length > 0) {
+        return helper.response(
+          res,
+          200,
+          "Success Get Product by Category ID",
+          result
+        );
+      } else {
+        return helper.response(
+          res,
+          404,
+          `Product with category id ${id} not found`
+        );
       }
     } catch (error) {
       return helper.response(res, 400, "Bad request", error);
@@ -104,6 +135,7 @@ module.exports = {
       const setData = {
         product_name,
         product_price,
+        product_image: req.file === undefined ? "" : req.file.filename,
         product_created_at: new Date(),
         product_status,
       };
