@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
     );
   },
 });
-// const { authorization } = require("../middleware/auth");
+const { authUser } = require("../middleware/auth");
 // const { getProductByIdRedis } = require("../middleware/redis");
 const {
   getProduct,
@@ -26,9 +26,9 @@ const {
 let upload = multer({ storage: storage });
 
 // GET
-router.get("/", getProduct);
-router.get("/:id", getProductById);
-router.get("/bycategory/:id", getProductByCategory);
+router.get("/", authUser, getProduct);
+router.get("/:id", authUser, getProductById);
+router.get("/bycategory/:id", authUser, getProductByCategory);
 
 // POST
 router.post("/", upload.single("product_image"), postProduct);

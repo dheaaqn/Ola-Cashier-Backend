@@ -10,14 +10,16 @@ const {
   getRecentOrder,
 } = require("../controller/HistoryController");
 
+const { authUser } = require("../middleware/auth");
+
 // GET
-router.get("/", getAllHistory);
-router.get("/dashboard/todaysincome", getTodaysIncome);
-router.get("/dashboard/thisyearincome", getThisYearsIncome);
-router.get("/dashboard/totalorders", getTotalOrders);
-router.get("/dashboard/datachart", getDataChart);
-router.get("/dashboard/recentorder", getRecentOrder);
-router.get("/:id", getHistoryById);
+router.get("/", authUser, getAllHistory);
+router.get("/dashboard/todaysincome", authUser, getTodaysIncome);
+router.get("/dashboard/thisyearincome", authUser, getThisYearsIncome);
+router.get("/dashboard/totalorders", authUser, getTotalOrders);
+router.get("/dashboard/datachart", authUser, getDataChart);
+router.get("/dashboard/recentorder", authUser, getRecentOrder);
+router.get("/:id", authUser, getHistoryById);
 
 // DELETE
 router.delete("/:id", deleteHistory);

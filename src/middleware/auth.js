@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const helper = require("../helper/product.js");
 
 module.exports = {
-  authorization: (req, res, next) => {
+  authUser: (req, res, next) => {
     let token = req.headers.authorization;
     if (token) {
       token = token.split(" ")[1];
@@ -18,7 +18,7 @@ module.exports = {
         }
       });
     } else {
-      return helper.response(res, 400, "Login dulu brou");
+      return helper.response(res, 400, "Login First!");
     }
   },
 };
