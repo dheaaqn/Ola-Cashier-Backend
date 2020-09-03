@@ -8,6 +8,7 @@ const user = require("./routes/user");
 
 route.use("/product", product);
 route.use("/category", category);
+route.use("/order", order);
 route.use("/history", history);
 route.use("/users", user);
 

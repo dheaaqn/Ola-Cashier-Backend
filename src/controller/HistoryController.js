@@ -6,7 +6,11 @@ const {
   getTodaysIncome,
   getThisYearIncome,
   getTotalOrders,
+  getDataChart,
+  getRecentOrder,
 } = require("../model/History");
+
+const { getOrderByHistoryId } = require("../model/Order");
 
 module.exports = {
   getAllHistory: async (req, res) => {
@@ -47,10 +51,11 @@ module.exports = {
   getTodaysIncome: async (req, res) => {
     try {
       const result = await getTodaysIncome();
-      if (result.todays_income) {
+      console.log(result);
+      if (result[0].todays_income) {
         return helper.response(res, 200, "Success Get Today Income", result);
       } else {
-        return helper.response(res, 404, "0 bro");
+        return helper.response(res, 404, "There's no income today");
       }
     } catch (error) {
       return helper.response(res, 400, "Bad Request");
@@ -69,9 +74,40 @@ module.exports = {
     try {
       const { perweek } = req.query;
       const result = await getTotalOrders(perweek);
-      return helper.response(res, 200, "Success get Orders", result);
+      if (result[0].orders) {
+        return helper.response(res, 200, "Success get Orders", result);
+      } else {
+        return helper.response(res, 404, "No one orders this week");
+      }
     } catch (error) {
       return helper.response(res, 400, "Bad Request");
+    }
+  },
+  getDataChart: async (req, res) => {
+    try {
+      const { date } = req.query;
+      const result = await getDataChart(date);
+      return helper.response(res, 200, "Success get data chart", result);
+    } catch (error) {
+      return helper.response(res, 400, "Bad Request");
+    }
+  },
+  getRecentOrder: async (req, res) => {
+    try {
+      const result = await getRecentOrder();
+      for (let i = 0; i < result.length; i++) {
+        result[i].orders = await getOrderByHistoryId(result[i].history_id);
+        let total = 0;
+        result[i].orders.forEach((value) => {
+          total += value.order_price;
+        });
+        const tax = (total * 10) / 100;
+        result[i].tax = tax;
+      }
+      return helper.response(res, 200, "Success Get recent Order", result);
+    } catch (error) {
+      console.log(error);
+      return helper.response(res, 400, "Bad Request", error);
     }
   },
 };

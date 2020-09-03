@@ -75,7 +75,27 @@ module.exports = {
   getTotalOrders: (perweek) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT(*) FROM history AS orders WHERE YEARWEEK(history_created_at) = YEARWEEK('${perweek})`,
+        `SELECT COUNT(*) AS orders FROM history WHERE YEARWEEK(history_created_at) = YEARWEEK('${perweek}')`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error));
+        }
+      );
+    });
+  },
+  getDataChart: (date) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT DATE(history_created_at) AS date_chart, SUM(history_subtotal) AS sum_subtotal FROM history WHERE MONTH(history_created_at) = MONTH('${date}') AND YEAR(history_created_at) = YEAR('${date}') GROUP BY DATE(history_created_at)`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error));
+        }
+      );
+    });
+  },
+  getRecentOrder: () => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM history WHERE DAY(history_created_at) = DAY(NOW()) AND YEAR(history_created_at) & YEAR(history_created_at) = YEAR(NOW())`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error));
         }
