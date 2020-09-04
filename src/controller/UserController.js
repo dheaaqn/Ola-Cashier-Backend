@@ -5,7 +5,7 @@ const { postUser, checkUser } = require("../model/Users");
 
 module.exports = {
   registerUser: async (req, res) => {
-    const { user_email, user_password, user_name } = req.body;
+    const { user_email, user_password, user_name, user_role } = req.body;
 
     const salt = bcrypt.genSaltSync(10);
     const encryptPassword = bcrypt.hashSync(user_password, salt);
@@ -14,7 +14,7 @@ module.exports = {
       user_email,
       user_password: encryptPassword,
       user_name,
-      user_role: 2,
+      user_role,
       user_status: 0,
       user_created_at: new Date(),
     };

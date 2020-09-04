@@ -148,10 +148,16 @@ module.exports = {
   patchProduct: async (req, res) => {
     try {
       const { id } = req.params;
-      const { product_name, product_price, product_status } = req.body;
+      const {
+        product_name,
+        product_price,
+        product_status,
+        product_image,
+      } = req.body;
       const setData = {
         product_name,
         product_price,
+        product_image: req.file === undefined ? "" : req.file.filename,
         product_updated_at: new Date(),
         product_status,
       };
