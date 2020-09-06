@@ -1,4 +1,6 @@
 const helper = require("../helper/product.js");
+const redis = require("redis");
+const client = redis.createClient();
 const {
   getOrder,
   getOrderById,
@@ -17,6 +19,7 @@ module.exports = {
   getOrder: async (req, res) => {
     try {
       const result = await getOrder();
+      client.set(`getorder`, JSON.stringify(result));
       if (result.length > 0) {
         return helper.response(res, 200, "Success Get Order", result);
       } else {
@@ -30,6 +33,7 @@ module.exports = {
     try {
       const { id } = req.params;
       const result = await getOrderById(id);
+      client.set(`getorderbyid:${id}`, JSON.stringify(result));
       if (result.length > 0) {
         return helper.response(res, 200, "Success Get Order by Id", result);
       } else {

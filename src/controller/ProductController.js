@@ -84,9 +84,15 @@ module.exports = {
 
     try {
       const result = await getProduct(sort, limit, offset);
+      const newResult = { result, setPage };
+      client.set(
+        `getproduct:${JSON.stringify(req.query)}`,
+        JSON.stringify(newResult)
+      );
 
       return helper.response(res, 200, "Success Get Product", result, setPage);
     } catch (error) {
+      console.log(error);
       return helper.response(res, 400, "Bad request", error);
     }
   },
@@ -95,8 +101,7 @@ module.exports = {
       const { id } = req.params;
       const result = await getProductById(id);
 
-      // set data result ke dalam redis
-      // client.set(`getproductbyid:${id}`, JSON.stringify(result));
+      client.set(`getproductbyid:${id}`, JSON.stringify(result));
 
       if (result.length > 0) {
         return helper.response(res, 200, "Success Get Product by Id", result);

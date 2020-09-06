@@ -1,4 +1,6 @@
 const helper = require("../helper/product.js");
+const redis = require("redis");
+const client = redis.createClient();
 const {
   getAllHistory,
   getHistoryById,
@@ -16,6 +18,7 @@ module.exports = {
   getAllHistory: async (req, res) => {
     try {
       const result = await getAllHistory();
+      client.set(`gethistory`, JSON.stringify(result));
       return helper.response(res, 200, "Success Get All History", result);
     } catch (error) {
       return helper.response(res, 400, "Bad Request");
@@ -25,6 +28,7 @@ module.exports = {
     try {
       const { id } = req.params;
       const result = await getHistoryById(id);
+      client.set(`gethistorybyid:${id}`, JSON.stringify(result));
       if (result.length > 0) {
         return helper.response(res, 200, "Success Get History by Id", result);
       } else {

@@ -5,16 +5,20 @@ const {
   postOrder,
   deleteOrder,
 } = require("../controller/OrderController");
-
+const {
+  getOrderRedis,
+  getOrderByIdRedis,
+  clearOrderRedis,
+} = require("../middleware/redis");
 const { authUser, authAdmin } = require("../middleware/auth");
 
 // GET
-router.get("/", authUser, getOrder);
-router.get("/:id", authUser, getOrderById);
+router.get("/", authUser, getOrderRedis, getOrder);
+router.get("/:id", authUser, getOrderByIdRedis, getOrderById);
 
 // POST
-router.post("/", authUser, postOrder);
+router.post("/", authUser, clearOrderRedis, postOrder);
 
 // DELETE
-router.delete("/:id", authAdmin, deleteOrder);
+router.delete("/:id", authAdmin, clearOrderRedis, deleteOrder);
 module.exports = router;
