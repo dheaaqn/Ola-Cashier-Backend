@@ -1,3 +1,4 @@
+const helper = require("../helper/product.js");
 const multer = require("multer");
 
 const storage = multer.diskStorage({
@@ -13,9 +14,9 @@ const storage = multer.diskStorage({
   },
 });
 
-const limits = { fileSize: 1024 * 1024 * 1 };
+// const limits = { fileSize: 1024 * 1024 * 1 };
 
-const fileFilter = (request, file, callback) => {
+const fileFilter = (req, file, callback) => {
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
     callback(null, true);
   } else {
@@ -23,7 +24,7 @@ const fileFilter = (request, file, callback) => {
   }
 };
 
-let upload = multer({ storage, limits, fileFilter }).single("product_image");
+let upload = multer({ storage, fileFilter }).single("product_image");
 
 const uploadFilter = (request, response, next) => {
   upload(request, response, function (err) {
