@@ -38,12 +38,16 @@ DB_NAME=online_shop // Your Database Name
 
 ## End Point
 
+Postman <a href="https://documenter.getpostman.com/view/6648790/TVCiUmVA">Collection</a>
+
 **1. GET**
 
 - `/product`(Get all product)
 - `/product/:id` (Get product by id)
 - `/category` (Get all category)
 - `/category/:id` (Get category by id)
+- `/order`(Get all order)
+- `/history`(Get all history)
 
 **2. POST**
 
