@@ -40,7 +40,6 @@ module.exports = {
       });
     } else {
       return helper.response(res, 400, "Login First!");
-      p;
     }
   },
 };

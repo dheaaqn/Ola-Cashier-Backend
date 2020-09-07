@@ -6,7 +6,6 @@ module.exports = {
   getProductRedis: (req, res, next) => {
     client.get(`getproduct:${JSON.stringify(req.query)}`, (error, result) => {
       if (!error && result != null) {
-        console.log("data ada dalam redis");
         return helper.response(
           res,
           200,
@@ -15,7 +14,6 @@ module.exports = {
           JSON.parse(result).setPage
         );
       } else {
-        console.log("data ngga ada");
         next();
       }
     });
@@ -24,7 +22,6 @@ module.exports = {
     const { id } = req.params;
     client.get(`getproductbyid:${id}`, (error, result) => {
       if (!error && result != null) {
-        console.log("data ada dalam redis");
         return helper.response(
           res,
           200,
@@ -32,7 +29,6 @@ module.exports = {
           JSON.parse(result)
         );
       } else {
-        console.log("data ngga ada");
         next();
       }
     });
@@ -50,7 +46,6 @@ module.exports = {
   getCategoryRedis: (req, res, next) => {
     client.get(`getcategory`, (error, result) => {
       if (!error && result != null) {
-        console.log("data ada dalam redis");
         return helper.response(
           res,
           200,
@@ -58,7 +53,6 @@ module.exports = {
           JSON.parse(result)
         );
       } else {
-        console.log("data ngga ada");
         next();
       }
     });
@@ -67,7 +61,6 @@ module.exports = {
     const { id } = req.params;
     client.get(`getcategorybyid:${id}`, (error, result) => {
       if (!error && result != null) {
-        console.log("data ada dalam redis");
         return helper.response(
           res,
           200,
@@ -75,7 +68,6 @@ module.exports = {
           JSON.parse(result)
         );
       } else {
-        console.log("data ngga ada");
         next();
       }
     });
@@ -93,7 +85,6 @@ module.exports = {
   getOrderRedis: (req, res, next) => {
     client.get(`getorder`, (error, result) => {
       if (!error && result != null) {
-        console.log("data ada dalam redis");
         return helper.response(
           res,
           200,
@@ -101,7 +92,6 @@ module.exports = {
           JSON.parse(result)
         );
       } else {
-        console.log("data ngga ada");
         next();
       }
     });
@@ -110,7 +100,6 @@ module.exports = {
     const { id } = req.params;
     client.get(`getorderbyid:${id}`, (error, result) => {
       if (!error && result != null) {
-        console.log("data ada dalam redis");
         return helper.response(
           res,
           200,
@@ -118,7 +107,6 @@ module.exports = {
           JSON.parse(result)
         );
       } else {
-        console.log("data ngga ada");
         next();
       }
     });
@@ -136,7 +124,6 @@ module.exports = {
   getHistoryRedis: (req, res, next) => {
     client.get(`gethistory`, (error, result) => {
       if (!error && result != null) {
-        console.log("data ada dalam redis");
         return helper.response(
           res,
           200,
@@ -144,7 +131,6 @@ module.exports = {
           JSON.parse(result)
         );
       } else {
-        console.log("data ngga ada");
         next();
       }
     });
@@ -153,7 +139,6 @@ module.exports = {
     const { id } = req.params;
     client.get(`gethistorybyid:${id}`, (error, result) => {
       if (!error && result != null) {
-        console.log("data ada dalam redis");
         return helper.response(
           res,
           200,
@@ -161,7 +146,6 @@ module.exports = {
           JSON.parse(result)
         );
       } else {
-        console.log("data ngga ada");
         next();
       }
     });
