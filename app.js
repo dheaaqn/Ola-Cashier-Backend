@@ -29,6 +29,6 @@ app.get("*", (req, res) => {
   res.status(404).send("Path not found");
 });
 
-app.listen(3000, "127.0.0.1", () => {
+app.listen(process.PORT, process.IP, () => {
   console.log("ExpressJS running on port 3000");
 });
