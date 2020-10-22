@@ -28,14 +28,14 @@ module.exports = {
       jwt.verify(token, "Secret", (error, result) => {
         if (
           (error && error.name === "JsonWebTokenError") ||
-          (error && error.name === "TokenExpired")
+          (error && error.name === "TokenExpiredError")
         ) {
           return helper.response(res, 403, error.message);
         } else if (result.user_role === 1) {
           req.token = result;
           next();
         } else {
-          return helper.response(res, 400, "are you human?");
+          return helper.response(res, 400, "You're not allowed to do that");
         }
       });
     } else {

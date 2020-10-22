@@ -3,11 +3,9 @@ const {
   getAllHistory,
   getHistoryById,
   deleteHistory,
-  getTodaysIncome,
-  getThisYearsIncome,
-  getTotalOrders,
   getDataChart,
   getRecentOrder,
+  getAllIncome
 } = require("../controller/HistoryController");
 const {
   getHistoryRedis,
@@ -19,9 +17,7 @@ const { authUser, authAdmin } = require("../middleware/auth");
 // GET
 router.get("/", authUser, getHistoryRedis, getAllHistory);
 router.get("/:id", authUser, getHistoryByIdRedis, getHistoryById);
-router.get("/dashboard/todaysincome", authUser, getTodaysIncome);
-router.get("/dashboard/thisyearincome", authUser, getThisYearsIncome);
-router.get("/dashboard/totalorders", authUser, getTotalOrders);
+router.get('/dashboard/all', getAllIncome);
 router.get("/dashboard/datachart", authUser, getDataChart);
 router.get("/dashboard/recentorder", authUser, getRecentOrder);
 

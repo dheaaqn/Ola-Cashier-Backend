@@ -77,8 +77,7 @@ module.exports = {
       limit,
       totalPage,
       totalData,
-      previousPage:
-        previousPage && `http://127.0.0.1:3000/product?${previousPage}`,
+      previousPage: previousPage && `http://127.0.0.1:3000/product?${previousPage}`,
       nextPage: nextPage && `http://127.0.0.1:3000/product?${nextPage}`,
     };
 
@@ -92,7 +91,6 @@ module.exports = {
 
       return helper.response(res, 200, "Success Get Product", result, setPage);
     } catch (error) {
-      console.log(error);
       return helper.response(res, 400, "Bad request", error);
     }
   },
@@ -136,10 +134,16 @@ module.exports = {
   },
   postProduct: async (req, res) => {
     try {
-      const { product_name, product_price, product_status } = req.body;
+      const {
+        product_name,
+        product_price,
+        product_status,
+        category_id,
+      } = req.body;
       const setData = {
         product_name,
         product_price,
+        category_id,
         product_image: req.file === undefined ? "" : req.file.filename,
         product_created_at: new Date(),
         product_status,

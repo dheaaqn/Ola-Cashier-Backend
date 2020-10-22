@@ -50,7 +50,6 @@ module.exports = {
       history_created_at: new Date(),
     };
     const resultHistory = await postHistory(setHistoryData);
-    console.log(resultHistory);
 
     const historyId = resultHistory.insertId;
     const dataOrder = req.body.order;

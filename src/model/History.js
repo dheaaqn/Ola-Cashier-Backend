@@ -55,37 +55,42 @@ module.exports = {
   getTodaysIncome: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT SUM(history_subtotal) AS todays_income FROM history WHERE DATE(history_created_at) = DATE(NOW())`,
+        `SELECT SUM(history_subtotal) AS todays_income FROM history WHERE DATE(history_created_at) = CURDATE()`,
+        (error, result) => {
+          if (!result[0].todays_income) {
+            result[0].todays_income = 0
+            resolve(result)
+          } else if (!error) {
+            resolve(result)
+          } reject(error)
+        }
+      );
+    });
+  },
+  getThisYearIncome: () => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT SUM(history_subtotal) as this_years_income FROM history WHERE YEAR(history_created_at) = YEAR(NOW())`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error));
         }
       );
     });
   },
-  getThisYearIncome: (year) => {
+  getTotalOrders: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT SUM(history_subtotal) as this_years_income FROM history WHERE YEAR(history_created_at) = ${year}`,
+        'SELECT COUNT(*) AS orders FROM history WHERE YEARWEEK(history_created_at) = YEARWEEK(NOW())',
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error));
         }
       );
     });
   },
-  getTotalOrders: (perweek) => {
+  getDataChart: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT(*) AS orders FROM history WHERE YEARWEEK(history_created_at) = YEARWEEK('${perweek}')`,
-        (error, result) => {
-          !error ? resolve(result) : reject(new Error(error));
-        }
-      );
-    });
-  },
-  getDataChart: (date) => {
-    return new Promise((resolve, reject) => {
-      connection.query(
-        `SELECT DATE(history_created_at) AS date_chart, SUM(history_subtotal) AS sum_subtotal FROM history WHERE MONTH(history_created_at) = MONTH('${date}') AND YEAR(history_created_at) = YEAR('${date}') GROUP BY DATE(history_created_at)`,
+        `SELECT DATE(history_created_at) AS date_chart, SUM(history_subtotal) AS sum_subtotal FROM history WHERE YEARWEEK(history_created_at) = YEARWEEK(NOW()) GROUP BY DATE(history_created_at)`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error));
         }

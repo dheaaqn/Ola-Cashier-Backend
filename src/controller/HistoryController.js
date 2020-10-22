@@ -52,45 +52,26 @@ module.exports = {
       return helper.response(res, 400, "Bad request", error);
     }
   },
-  getTodaysIncome: async (req, res) => {
+  getAllIncome: async (req, res) => {
     try {
-      const result = await getTodaysIncome();
-      console.log(result);
-      if (result[0].todays_income) {
-        return helper.response(res, 200, "Success Get Today Income", result);
-      } else {
-        return helper.response(res, 404, "There's no income today");
+      const todaysIncome = await getTodaysIncome()
+      const totalOrders = await getTotalOrders()
+      const thisYearsIncome = await getThisYearIncome()
+
+      const income = {
+        todaysIncome: todaysIncome[0].todays_income,
+        totalOrders: totalOrders[0].orders,
+        thisYearsIncome: thisYearsIncome[0].this_years_income
       }
-    } catch (error) {
-      return helper.response(res, 400, "Bad Request");
-    }
-  },
-  getThisYearsIncome: async (req, res) => {
-    try {
-      const { year } = req.query;
-      const result = await getThisYearIncome(year);
-      return helper.response(res, 200, "Success Get This Year Income", result);
-    } catch (error) {
-      return helper.response(res, 400, "Bad Request");
-    }
-  },
-  getTotalOrders: async (req, res) => {
-    try {
-      const { perweek } = req.query;
-      const result = await getTotalOrders(perweek);
-      if (result[0].orders) {
-        return helper.response(res, 200, "Success get Orders", result);
-      } else {
-        return helper.response(res, 404, "No one orders this week");
-      }
+
+      return helper.response(res, 201, "Success Get All Income Data", income);
     } catch (error) {
       return helper.response(res, 400, "Bad Request");
     }
   },
   getDataChart: async (req, res) => {
     try {
-      const { date } = req.query;
-      const result = await getDataChart(date);
+      const result = await getDataChart();
       return helper.response(res, 200, "Success get data chart", result);
     } catch (error) {
       return helper.response(res, 400, "Bad Request");
@@ -98,19 +79,13 @@ module.exports = {
   },
   getRecentOrder: async (req, res) => {
     try {
-      const result = await getRecentOrder();
-      for (let i = 0; i < result.length; i++) {
-        result[i].orders = await getOrderByHistoryId(result[i].history_id);
-        let total = 0;
-        result[i].orders.forEach((value) => {
-          total += value.order_price;
-        });
-        const tax = (total * 10) / 100;
-        result[i].tax = tax;
+      const history = await getAllHistory()
+      for (i = 0; i < history.length; i++) {
+        const order = await getOrderByHistoryId(history[i].history_id)
+        history[i].orders = order
       }
-      return helper.response(res, 200, "Success Get recent Order", result);
+      return helper.response(res, 200, "Success Get recent Order", history);
     } catch (error) {
-      console.log(error);
       return helper.response(res, 400, "Bad Request", error);
     }
   },

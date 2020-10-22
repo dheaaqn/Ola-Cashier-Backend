@@ -40,8 +40,12 @@ module.exports = {
         category_name,
         category_status,
       };
-      const result = await postCategory(setData);
-      return helper.response(res, 201, "Category Created", result);
+      if (setData.category_name && setData.category_status) {
+        const result = await postCategory(setData);
+        return helper.response(res, 201, "Category Created", result); 
+      } else {
+        return helper.response(res, 400, "Form must be filled"); 
+      }
     } catch (error) {
       return helper.response(res, 400, "Bad request", error);
     }
@@ -55,11 +59,13 @@ module.exports = {
         category_status,
       };
       const checkId = await getCategoryById(id);
-      if (checkId.length > 0) {
+      if (checkId.length < 0) {
+        return helper.response(res, 404, `Category ID ${id} Not Found`);
+      } else if(!setData.category_name){
+        return helper.response(res, 400, "Form must be filled");
+      } else {
         const result = await patchCategory(setData, id);
         return helper.response(res, 201, "Category Updated", result);
-      } else {
-        return helper.response(res, 404, `Category ID ${id} Not Found`);
       }
     } catch (error) {
       return helper.response(res, 400, "Bad request", error);
