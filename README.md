@@ -1,6 +1,7 @@
 <h1 align="center">ExpressJS - Ola Cashiér RESTfull API</h1>
 
-#background_projek. [More about Express](https://en.wikipedia.org/wiki/Express.js)
+Ola is REST API for ola point of sale app. Simple application to CRUD database with NodeJS, Express, and MySql.
+This application use JWT to authentication and authorization. [More about Express](https://en.wikipedia.org/wiki/Express.js)
 
 ## Built With
 
@@ -40,26 +41,16 @@ DB_NAME=online_shop // Your Database Name
 
 Postman <a href="https://documenter.getpostman.com/view/6648790/TVCiUmVA">Collection</a>
 
-**1. GET**
+## Run the app
 
-- `/product`(Get all product)
-- `/product/:id` (Get product by id)
-- `/category` (Get all category)
-- `/category/:id` (Get category by id)
-- `/order`(Get all order)
-- `/history`(Get all history)
+Development mode
 
-**2. POST**
+```bash
+$ npm run dev
+```
 
-- `/product` (Post product)
-  - `{ "product_name": "Tacos", "category_id": 2, "product_harga": 85000 , "product_status" : 1 | 0}`
+Deploy mode
 
-**3. PATCH**
-
-- `/product/:id` (Update product by id)
-
-  - `{"product_name" : "Tequila", "category_id" : 1, "product_harga" : 186000, "product_status" : 1 | 0}`
-
-**4. DELETE**
-
-- `/product/:id` (Delete product by id)
+```bash
+$ npm start
+```
